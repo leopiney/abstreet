@@ -14,4 +14,4 @@ nbez = "0.1.0"
 petgraph = "0.5.0"
 serde = "1.0.110"
 thread_local = "1.0.1"
-seattle_traffic_signals = { git = "https://github.com/dabreegster/seattle_traffic_signals" }
+seattle_traffic_signals = { path = "/home/dabreegster/seattle_traffic_signals" }

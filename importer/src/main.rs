@@ -1,4 +1,5 @@
 mod austin;
+mod montevideo;
 mod seattle;
 #[cfg(feature = "scenarios")]
 mod soundcast;
@@ -102,6 +103,7 @@ fn main() {
         if job.osm_to_raw {
             match job.city.as_ref() {
                 "austin" => austin::osm_to_raw(&name),
+                "montevideo" => montevideo::osm_to_raw(&name),
                 "seattle" => seattle::osm_to_raw(&name),
                 x => panic!("Unknown city {}", x),
             }
@@ -169,7 +171,9 @@ fn oneshot(osm_path: String, clip: Option<String>, drive_on_right: bool) {
         },
         &mut timer,
     );
+    println!("- Creating map from raw data");
     let map = map_model::Map::create_from_raw(raw, true, &mut timer);
+    println!("- Saving map");
     timer.start("save map");
     map.save();
     timer.stop("save map");

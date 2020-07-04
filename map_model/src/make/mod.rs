@@ -190,7 +190,7 @@ impl Map {
             }
             map.roads.push(road);
         }
-
+        println!("- Going through intersections");
         for i in map.intersections.iter_mut() {
             if is_border(i, &map.lanes) {
                 i.intersection_type = IntersectionType::Border;

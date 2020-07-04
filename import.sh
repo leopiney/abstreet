@@ -1,5 +1,5 @@
 #!/bin/bash
 
 cd importer;
-RUST_BACKTRACE=1 cargo run --release --features scenarios -- $@;
+RUST_BACKTRACE=full cargo run --verbose --features scenarios -- $@;
 cd ..;

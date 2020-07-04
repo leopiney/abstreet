@@ -59,6 +59,7 @@ impl ControlTrafficSignal {
         id: IntersectionID,
         timer: &mut Timer,
     ) -> Vec<(String, ControlTrafficSignal)> {
+        println!("Checking possible policies in ControlTrafficSignal");
         get_possible_policies(map, id, timer)
     }
     // TODO tmp

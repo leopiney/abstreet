@@ -137,11 +137,16 @@ impl TurnGroup {
     pub(crate) fn for_i(i: IntersectionID, map: &Map) -> BTreeMap<TurnGroupID, TurnGroup> {
         let mut results = BTreeMap::new();
         let mut groups: MultiMap<(DirectedRoadID, DirectedRoadID), TurnID> = MultiMap::new();
+        println!("Checking TurnGroups for {}", i);
         for turn in map.get_turns_in_intersection(i) {
             let from = map.get_l(turn.id.src).get_directed_parent(map);
             let to = map.get_l(turn.id.dst).get_directed_parent(map);
+            println!(
+                "Checking TurnGroups intersections from {} to {} with type {:?}",
+                from, to, turn.turn_type
+            );
             match turn.turn_type {
-                TurnType::SharedSidewalkCorner => {}
+                TurnType::SharedSidewalkCorner => println!("Got turn type SharedSidewalkCorner"),
                 TurnType::Crosswalk => {
                     let id = TurnGroupID {
                         from,
@@ -165,6 +170,8 @@ impl TurnGroup {
                 }
             }
         }
+        println!("Got {} groups for i {}", groups.len(), i);
+
         for ((from, to), members) in groups.consume() {
             let geom = turn_group_geom(
                 members.iter().map(|t| &map.get_t(*t).geom).collect(),
@@ -206,8 +213,10 @@ impl TurnGroup {
                 },
             );
         }
+
         if results.is_empty() {
-            panic!("{} has no TurnGroups!", map.get_i(i).orig_id);
+            // panic!("{} has no TurnGroups!", map.get_i(i).orig_id);
+            println!("{} has no TurnGroups!", map.get_i(i).orig_id);
         }
         results
     }

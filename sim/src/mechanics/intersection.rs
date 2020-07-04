@@ -241,12 +241,14 @@ impl IntersectionSimState {
             }
         }
 
-        state.phase_ends_at = now
-            + signal.phases[state.current_phase]
-                .phase_type
-                .simple_duration();
-        scheduler.push(state.phase_ends_at, Command::UpdateIntersection(id));
-        self.wakeup_waiting(now, id, scheduler, map);
+        if signal.phases.len() > 0 {
+            state.phase_ends_at = now
+                + signal.phases[state.current_phase]
+                    .phase_type
+                    .simple_duration();
+            scheduler.push(state.phase_ends_at, Command::UpdateIntersection(id));
+            self.wakeup_waiting(now, id, scheduler, map);
+        }
     }
 
     // For cars: The head car calls this when they're at the end of the lane WaitingToAdvance. If

@@ -242,7 +242,7 @@ impl Lane {
             "left" | "left\\left" => vec![TurnType::Left],
             "right" => vec![TurnType::Right],
             // TODO What is blank supposed to mean? From few observed cases, same as through
-            "through" | "" => vec![
+            "through" | "throug" | "" => vec![
                 TurnType::Straight,
                 TurnType::LaneChangeLeft,
                 TurnType::LaneChangeRight,

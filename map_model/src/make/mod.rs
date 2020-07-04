@@ -228,7 +228,10 @@ impl Map {
             }
 
             for t in turns::make_all_turns(map.driving_side, i, &map.roads, &map.lanes, timer) {
-                assert!(!map.turns.contains_key(&t.id));
+                assert!(
+                    !map.turns.contains_key(&t.id),
+                    format!("- Making all turns failed for {}", &t.id)
+                );
                 i.turns.insert(t.id);
                 if t.geom.length() < geom::EPSILON_DIST {
                     timer.warn(format!("{} is a very short turn", t.id));
@@ -237,6 +240,7 @@ impl Map {
             }
         }
 
+        println!("- Making all turns finished");
         timer.start("find parking blackholes");
         for (l, redirect) in connectivity::redirect_parking_blackholes(&map, timer) {
             map.lanes[l.0].parking_blackhole = Some(redirect);
@@ -274,10 +278,12 @@ impl Map {
             });
         }
 
+        println!("- Finding bridges");
         bridges::find_bridges(&mut map.roads, &map.bounds, timer);
 
         let mut stop_signs: BTreeMap<IntersectionID, ControlStopSign> = BTreeMap::new();
         let mut traffic_signals: BTreeMap<IntersectionID, ControlTrafficSignal> = BTreeMap::new();
+
         for i in &map.intersections {
             match i.intersection_type {
                 IntersectionType::StopSign => {

@@ -12,6 +12,7 @@ pub fn get_possible_policies(
     timer: &mut Timer,
 ) -> Vec<(String, ControlTrafficSignal)> {
     let mut results = Vec::new();
+    println!("Checking possible policies in traffic signals");
 
     // TODO Cache with lazy_static. Don't serialize in Map; the repo of signal data may evolve
     // independently.
@@ -79,9 +80,13 @@ fn greedy_assignment(map: &Map, intersection: IntersectionID) -> ControlTrafficS
                     .insert(remaining_groups.remove(idx));
             }
             None => {
-                assert!(!current_phase.protected_groups.is_empty());
-                phases.push(current_phase);
-                current_phase = Phase::new();
+                if current_phase.protected_groups.is_empty() {
+                    println!("Warning - current_phase protected groups is empty")
+                } else {
+                    phases.push(current_phase);
+                    current_phase = Phase::new();
+                }
+
                 if remaining_groups.is_empty() {
                     break;
                 }
